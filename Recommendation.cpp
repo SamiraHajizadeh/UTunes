@@ -136,23 +136,6 @@ void Recommendation::print_similar_users(string username, int count, vector<User
 	}
 }
 
-vector<Song*> Recommendation::get_recommended_songs(std::string username, int count, vector<User*> users){
-	calculate_common_songs(users);
-
-	vector<pair<Song*, float>> confidences = get_confidences(username);
-	sort(confidences.begin(), confidences.end(), [=](pair<Song*, float>& a, pair<Song*, float>& b){
-		if (a.second == b.second)
-			return (a.first->get_id() < b.first->get_id());
-		return (a.second > b.second);
-	});
-
-	vector<Song*> recommended;
-	for (int i = 0; i < count && i < confidences.size(); i++){
-		recommended.push_back(confidences[i].first);
-	}
-	return recommended;
-}
-
 
 void Recommendation::print_recommended_songs(std::string username, int count, vector<User*> users){
 	calculate_common_songs(users);

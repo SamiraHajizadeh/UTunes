@@ -19,7 +19,6 @@ public:
 	~User();
 	std::string get_username(){ return username;}
 	std::string get_email(){ return email;}
-	std::vector<Playlist*> get_playlists(){ return playlists;}
 	int get_password(){ return hash_password;}
 	bool song_already_liked(Song* song);
 	void like_song(Song* song);

@@ -23,7 +23,6 @@ public:
 	std::string get_link(){ return link;}
 	int get_release_year(){ return release_year;}
 	int get_likes(){ return likes_num;}
-	int get_playlists(){ return playlists_num;}
 	void print_partially();
 	void print_completely();
 	void like();
@@ -32,8 +31,6 @@ public:
 	void deleted_from_playlist();
 	void comment(std::string user, std::string text, int time);
 	void print_comments();
-	std::vector<std::vector<std::string>> get_data();
-	std::vector<std::string> get_partial_data();
 
 private:
 	int id;

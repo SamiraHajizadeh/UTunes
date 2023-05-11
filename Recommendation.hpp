@@ -20,7 +20,6 @@ public:
 	Recommendation(std::vector<Song*>& _songs);
 	void print_similar_users(std::string username, int count, std::vector<User*>& users);
 	void print_recommended_songs(std::string username, int count, std::vector<User*> users);  
-	std::vector<Song*> get_recommended_songs(std::string username, int count, std::vector<User*> users);
 
 private:
 	void add_user_liked_songs(User*& user);

@@ -62,12 +62,11 @@ bool Utunes::username_available(string username){
 	return false;
 }
 
-int Utunes::signup_user(string email, string username, string password){
+void Utunes::signup_user(string email, string username, string password){
 	if (email_available(email) || username_available(username))
-		return 0;
+		throw Bad_Request();
 	users.push_back(new User(username, password, email));
 	logged_in = users[users.size() - 1];
-	return 1;
 }
 
 
@@ -93,10 +92,10 @@ void Utunes::print_all_songs(){
 }
 
 
-User* Utunes::verify(string username, string pass){
+User* Utunes::verify(string email, string pass){
 	
 	for (int i = 0; i < users.size(); i++){
-		if (users[i]->get_username() == username){
+		if (users[i]->get_email() == email){
 			if(users[i]->get_password() == hash_function(pass)){
 				return users[i];
 			}
@@ -105,16 +104,17 @@ User* Utunes::verify(string username, string pass){
 	return nullptr;
 }
 
-string Utunes::log_in_user(string username, string password){
-	if (verify(username, password) == nullptr)
-		return "";
-	logged_in = verify(username, password);
-	return logged_in->get_email();
+void Utunes::log_in_user(string email, string password){
+
+	if (verify(email, password) == nullptr)
+		throw Bad_Request();
+
+	logged_in = verify(email, password);
 }
 
 
 void Utunes::logout_user(){
-	//check_logged_in();
+	check_logged_in();
 	logged_in = nullptr;
 	delete_all_filters();
 }
@@ -142,15 +142,10 @@ void Utunes::print_songs(int id){
 void Utunes::like_song(int id){
 	check_logged_in();
 	if (find_song_by_id(id) == nullptr)
-		return;
+		throw Not_Found();
 	logged_in->like_song(find_song_by_id(id));
 }
 
-
-vector<Song*> Utunes::get_liked_songs(){
-	check_logged_in();
-	return logged_in->get_liked_songs();
-}
 
 void Utunes::print_liked_songs(){
 	check_logged_in();
@@ -160,12 +155,14 @@ void Utunes::print_liked_songs(){
 
 void Utunes::delete_song_from_liked(int id){
 	check_logged_in();
-	if (logged_in->song_already_liked(find_song_by_id(id)))
-		logged_in->delete_song_from_liked(id);
+	if (!logged_in->song_already_liked(find_song_by_id(id)))
+		throw Bad_Request();
+
+	logged_in->delete_song_from_liked(id);
 }
 
 
-int Utunes::make_playlist(string name, string privacy){
+void Utunes::make_playlist(string name, string privacy){
 	check_logged_in();
 
 	bool _public = true;
@@ -173,7 +170,7 @@ int Utunes::make_playlist(string name, string privacy){
 		_public = false;
 
 	playlists.push_back(logged_in->make_playlist(name, _public, playlists.size()+1));
-	return playlists.size();
+	cout << playlists.size() << endl;
 }
 
 User* Utunes::find_user(string username){
@@ -184,10 +181,6 @@ User* Utunes::find_user(string username){
 	return nullptr;
 }
 
-
-vector<Playlist*> Utunes::get_playlists(){
-	return logged_in->get_playlists();
-}
 
 void Utunes::print_playlist(string username){
 	check_logged_in();
@@ -208,9 +201,13 @@ Playlist* Utunes::find_playlist_by_id(int id){
 
 void Utunes::add_song_to_playlist(int playlist_id, int song_id){
 	check_logged_in();
-	if (find_playlist_by_id(playlist_id) == nullptr || !logged_in->has_playlist(playlist_id)
-		|| find_song_by_id(song_id) == nullptr)
-		return;
+
+	if (find_playlist_by_id(playlist_id) == nullptr)
+		throw Bad_Request();
+
+	if (!logged_in->has_playlist(playlist_id))
+		throw Permission_Denied();
+
 	find_playlist_by_id(playlist_id)->add_song_to_playlist(find_song_by_id(song_id));
 }
 
@@ -229,10 +226,11 @@ void Utunes::delete_song_from_playlist(int playlist_id, int song_id){
 	check_logged_in();
 
 	if (find_playlist_by_id(playlist_id) == nullptr || !find_playlist_by_id(playlist_id)->has_song(song_id))
-		return;
+		throw Bad_Request();
 
 	if (!logged_in->has_playlist(playlist_id))
-		return;
+		throw Permission_Denied();
+
 	find_playlist_by_id(playlist_id)->delete_song(song_id);
 }
 
@@ -339,7 +337,7 @@ void Utunes::get_similar_users(int count){
 }
 
 
-vector<Song*> Utunes::get_recommended_songs(int count){
+void Utunes::get_recommended_songs(int count){
 	check_logged_in();
-	return recommendation->get_recommended_songs(logged_in->get_username(), count, users);
+	recommendation->print_recommended_songs(logged_in->get_username(), count, users);
 }

@@ -12,8 +12,6 @@ class Playlist{
 public:
 	Playlist(std::string _name, bool _is_public, int _id);
 	void print(bool show_private);
-	std::string get_name(){ return name;}
-	std::vector<Song*> get_songs(){ return songs;}
 	std::string privacy_state();
 	int get_id(){ return id;}
 	bool is_private() { return !is_public;}

@@ -27,10 +27,10 @@ bool User::song_already_liked(Song* song){
 }
 
 void User::like_song(Song* song){
-	if (!song_already_liked(song)){
-		song->like();
-		liked_songs.push_back(song);
-	}
+	if (song_already_liked(song))
+		throw Bad_Request();
+	song->like();
+	liked_songs.push_back(song);
 }
 
 

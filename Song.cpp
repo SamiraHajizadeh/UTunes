@@ -20,23 +20,6 @@ Song::~Song(){
 	}
 }
 
-vector<vector<string>> Song::get_data(){
-	vector<vector<string>> strVec = 
-		{{"Attribute", "value"},
-		{"ID", to_string(id)},
-		{"Title", title}, 
-		{"Artist", artist},
-		{"Release Year", to_string(release_year)}, 
-		{"Likes", to_string(likes_num)}, 
-		{"Playlists", to_string(playlists_num)}};
-	return strVec;
-}
-
-vector<string> Song::get_partial_data(){
-	vector<string> strVec = {title, artist, to_string(release_year)};
-	return strVec;
-}
-
 void Song::print_partially(){
 	cout << id << SPACE << title << SPACE << artist << SPACE << release_year << endl;
 }
