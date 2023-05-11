@@ -1,4 +1,5 @@
 # UTunes
+This project is a simulation of a song recommender system named UTunes, implemented using C++, html, and CSS programming languages.
 
 ## Overview
 UTunes is a song recommendation system that uses a CLI or a command line interface to store the information of each user (their username, password, liked songs, and email) and recommend songs with a specific formula. Users can also post songs in the system (by giving their id, title, artist, release_year, and link). Each person can sign up, login, logout, like songs and create playlists. There is also the ability to filter songs using their id, title, artist or release year. People can also write comments for each song. The password of each user is hashed before being stored. Additionally, the signup, login, logout, home, song details page, liked songs page and playlist management page have been implemented using HTML and CSS.
