@@ -8,7 +8,7 @@ To install and run UTunes on your system, follow these steps:
 1. Clone this repository using the following command:
 
 ```
-git clone https://github.com/yourusername/utunes.git
+git clone https://github.com/SamiraHajizadeh/utunes.git
 ```
 
 2. Navigate to the cloned repository directory:
